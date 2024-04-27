@@ -9,11 +9,11 @@
 int main(int argc, char * argv[]) {
     argparse::ArgumentParser arpa("JummySalesman", "0");
     arpa.add_argument("--seed")
-            .help("Generiert ein einzigartiges Szenario für die Simulation")
-            .default_value("AAA123");
+        .help("Generiert ein einzigartiges Szenario für die Simulation")
+        .default_value("AAA123");
     arpa.add_argument("--host")
-            .help("Url des Server, zu dem eine Verbindung aufgebaut wird")
-            .default_value("http://127.0.0.1:1234");
+        .help("Url des Server, zu dem eine Verbindung aufgebaut wird")
+        .default_value("http://127.0.0.1:1234");
     arpa.parse_args(argc, argv);
 
     auto arg_seed = arpa.get<>("--seed");
