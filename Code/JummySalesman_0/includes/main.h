@@ -25,13 +25,13 @@ nlohmann::json start_simulation(const std::string & host, const std::string & se
  * @param drivers JSON aus der die Drivers gelesen werden
  * @return Vector mit zeigern auf die einzelnen Fahrer
  */
-std::map<std::string, std::shared_ptr<Driver>> initialize_drivers(nlohmann::json drivers); // ändere json drivers zu cosnt json& drivers wenn möglich.
+std::map<std::string, Driver> initialize_drivers(nlohmann::json drivers); // ändere json drivers zu cosnt json& drivers wenn möglich.
 /**
  * @brief Erstellt initiale list an Restaurants aus der response
  * @param restaurant_list JSON array aus der die Restaurants gelesen werden.
  * @return Vector mit shared_ptr auf die Restaurants.
  */
-std::vector<std::shared_ptr<Restaurant>> initialize_restaurants(json restaurant_list);
+std::map<std::string, Restaurant> initialize_restaurants(json restaurant_list);
 /**
  * @brief Funktion, welche die simulationsschritte durchführt.
  * @param first_response JSON welche aus der initialen response des Servers besteht
@@ -42,8 +42,8 @@ std::vector<std::shared_ptr<Restaurant>> initialize_restaurants(json restaurant_
 void run_simulation(
         json & first_response,
         const std::string & host,
-        std::map<std::string, std::shared_ptr<Driver>> driver_list,
-        std::vector<std::shared_ptr<Restaurant>> restaurant_list
+        std::map<std::string, Driver> driver_list,
+        std::map<std::string, Restaurant> restaurant_list
         );
 /**
  * @brief Behandelt die verschiedenen events, die der server uns sendet
@@ -53,8 +53,8 @@ void run_simulation(
  * @param event das event welches vom server gesendet wird.
  */
 void handle_event(
-        std::map<std::string, std::shared_ptr<Order>> &orders,
-        std::map<std::string, std::shared_ptr<Driver>> &drivers,
+        std::map<std::string, Order> &orders,
+        std::map<std::string, Driver> &drivers,
         std::map<std::string, std::vector<std::string>> &driver_actions,
         json event);
 /**
@@ -62,7 +62,7 @@ void handle_event(
  * @param drivers Liste der fahrer die aktuallisert werden soll
  * @param updated_drivers JSON mit den aktuallisierten Fahrern, die übernommen werden soll.
 */
-void update_drivers(std::map<std::string, std::shared_ptr<Driver>> &drivers, json updated_drivers);
+void update_drivers(std::map<std::string, Driver> & drivers, json updated_drivers);
 /**
  * @brief stellt die driver_actions zusammen die an den server weitergegeben werden.
  * @param mandatory_actions
@@ -72,10 +72,10 @@ void update_drivers(std::map<std::string, std::shared_ptr<Driver>> &drivers, jso
  */
 void choose_actions(
         json mandatory_actions,
-        std::map<std::string, std::shared_ptr<Order>> &orders,
-        std::map<std::string, std::shared_ptr<Driver>> &drivers,
-        std::vector<std::shared_ptr<Restaurant>> &restaurants,
-        std::map<std::string, std::vector<std::string>> &driver_actions
+        std::map<std::string, Order> & orders,
+        std::map<std::string, Driver> & drivers,
+        std::map<std::string, Restaurant> & restaurants,
+        std::map<std::string, std::vector<std::string>> & driver_actions
         );
 
 
