@@ -34,14 +34,8 @@ map<string, shared_ptr<Driver>> initialize_drivers(json drivers) {
     map<string, shared_ptr<Driver>> return_drivers;
 
     for(auto & driver : drivers){
-        cout << driver.dump() << endl;
-        int id = driver["id"];
-        int capacity = driver["capacity"];
-        int load = driver["current_load"];
-        pair<double, double> location = driver["location"];
-        int speed = driver["speed"];
-        shared_ptr<Driver> new_driver = make_shared<Driver>(id, capacity, load, location, speed);
-        return_drivers.insert({{to_string(id), new_driver}});
+        shared_ptr<Driver> new_driver = make_shared<Driver>(driver["id"], driver["capacity"], driver["current_load"], driver["location"], driver["speed"]);
+        return_drivers.insert({{to_string(driver["id"]), new_driver}});
     }
     return return_drivers;
 }
@@ -50,9 +44,7 @@ vector<shared_ptr<Restaurant>> initialize_restaurants(json restaurant_list) {
     vector<shared_ptr<Restaurant>> restaurants;
 
     for(auto & restaurant : restaurant_list){
-        int id = restaurant["id"];
-        pair<double, double> location = restaurant["location"];
-        shared_ptr<Restaurant> new_restaurant = make_shared<Restaurant>(id, location);
+        shared_ptr<Restaurant> new_restaurant = make_shared<Restaurant>(restaurant["id"], restaurant["location"]);
         restaurants.push_back(new_restaurant);
     }
 
@@ -63,8 +55,8 @@ json start_simulation(const string & host, const string & seed) {
     json seed_json = json::parse(R"({"seed":")" + seed + "\"}");
 
     Response response = Post(Url{host + "/"},
-                                       Body{seed_json.dump()},
-                                       Header{{"Content-Type","application/json"}});
+                             Body{seed_json.dump()},
+                             Header{{"Content-Type","application/json"}});
     return json::parse(response.text);
 }
 
@@ -96,11 +88,7 @@ void run_simulation(json & first_response, const string & host, map<string, shar
     }
 }
 
-void handle_event(
-    map<string, shared_ptr<Order>> &orders,
-    map<string, shared_ptr<Driver>> &drivers,
-    map<string, vector<string>> &driver_actions,
-    json event
+void handle_event(map<string, shared_ptr<Order>> &orders, map<string, shared_ptr<Driver>> &drivers, map<string, vector<string>> &driver_actions, json event
     ) {
     if(event["event_type"] == "order"){
         string order_id = event["data"]["id"];

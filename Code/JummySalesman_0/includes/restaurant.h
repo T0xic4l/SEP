@@ -14,7 +14,7 @@ private:
     std::pair<double, double> location;
 public:
     Restaurant() = default;
-    Restaurant(int id, std::pair<double, double> &location);
+    Restaurant(int id, std::pair<double, double> location);
 
     int get_id() const;
     std::pair<double, double> get_location() const;
