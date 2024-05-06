@@ -1,6 +1,3 @@
-//
-// Created by patrick on 29.04.24.
-//
 #include "../includes/helperfunction.h"
 
 double direct_distance(std::pair<double, double> &cord1,std::pair<double, double> &cord2) {

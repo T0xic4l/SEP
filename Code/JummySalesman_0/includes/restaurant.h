@@ -1,7 +1,3 @@
-//
-// Created by floriangk on 01.05.24.
-//
-
 #ifndef JUMMYSALESMAN_RESTAURANT_H
 #define JUMMYSALESMAN_RESTAURANT_H
 

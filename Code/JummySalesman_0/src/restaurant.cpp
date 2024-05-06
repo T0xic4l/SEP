@@ -1,7 +1,3 @@
-//
-// Created by floriangk on 01.05.24.
-//
-
 #include "../includes/restaurant.h"
 
 Restaurant::Restaurant(int id, std::pair<double, double> &location)

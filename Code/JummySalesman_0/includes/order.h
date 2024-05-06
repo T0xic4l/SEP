@@ -1,7 +1,3 @@
-//
-// Created by floriangk on 30.04.24.
-//
-
 #ifndef JUMMYSALESMAN_ORDER_H
 #define JUMMYSALESMAN_ORDER_H
 

@@ -1,7 +1,3 @@
-//
-// Created by patrick on 29.04.24.
-//
-
 #ifndef HELPERFUNCTION_H
 #define HELPERFUNCTION_H
 #include <complex>
