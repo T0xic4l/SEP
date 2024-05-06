@@ -107,4 +107,3 @@ void append_new_orders(std::vector<std::shared_ptr<Order>> &orders, json event) 
         std::cout << event.dump() << "\n";
     }
 }
-git
