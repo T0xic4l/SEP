@@ -109,9 +109,9 @@ void handle_event(map<string, Order> & orders, map<string, Driver> & drivers, ma
             driver_actions[to_string(driver_id)].erase(result);
 
         if(event["event_type"] == "dropoff"){ //falls das event ein dropoff ist verringere den load des drivers
-            int current_load = drivers[to_string(driver_id)].get_load();
-            int order_cap = orders[order_id].get_capacity();
-            drivers[to_string(driver_id)].set_load(current_load - order_cap);
+            //int current_load = drivers[to_string(driver_id)].get_load();
+            //int order_cap = orders[order_id].get_capacity();
+            //drivers[to_string(driver_id)].set_load(current_load - order_cap);
         }
     } else {
         cout << event.dump() << endl;
@@ -145,9 +145,9 @@ void choose_actions(json mandatory_actions, map<string, Order> & orders, map<str
             for(auto & driver : drivers) {
                 pair<double, double> driver_location = driver.second.get_loacation();
                 double driver_distance = direct_distance(driver_location, restaurant_location);
-                if (order_capacity + driver.second.get_load() > driver.second.get_capacity()){
+                /* if (order_capacity + driver.second.get_load() > driver.second.get_capacity()){
                     continue;
-                }
+                } */
                 if (driver_distance < distance) {
                     distance = driver_distance;
                     assign_id = driver.second.get_id();
@@ -155,7 +155,7 @@ void choose_actions(json mandatory_actions, map<string, Order> & orders, map<str
             }
             if(!orders[order_id].is_assigned() && assign_id != -1){
                 driver_actions[to_string(assign_id)].push_back(unique_id);
-                drivers[to_string(assign_id)].set_load(drivers[to_string(assign_id)].get_load()+order_capacity);
+                //drivers[to_string(assign_id)].set_load(drivers[to_string(assign_id)].get_load() + order_capacity);
                 orders[order_id].set_assigned(true);
             }
         }else if(action_type == "dropoff"){
@@ -168,7 +168,7 @@ void choose_actions(json mandatory_actions, map<string, Order> & orders, map<str
                     return item == unique_id;
                 });
             if(!already_assigned){
-                driver_actions[driver_id].push_back(unique_id);
+                driver_actions[driver_id].insert(driver_actions[driver_id].begin(), unique_id);
             }
         }
     }
