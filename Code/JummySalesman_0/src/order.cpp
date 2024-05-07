@@ -17,6 +17,10 @@ int Order::get_capacity() const {
     return this->capacity;
 }
 
+std::pair<double,double> Order::get_target_location() const {
+    return this->target_location;
+}
+
 bool Order::is_assigned() const {
     return this->assigned;
 }

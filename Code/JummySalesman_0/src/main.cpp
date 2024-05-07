@@ -130,7 +130,7 @@ void choose_actions(json mandatory_actions, map<string, Order> & orders, map<str
         string action_type = action["action_type"];
         string order_id = action["data"]["order_id"];
         int order_restaurant = orders[order_id].get_restaurant();
-        int order_capacity = orders[order_id].get_capacity();
+        //int order_capacity = orders[order_id].get_capacity();
 
         string unique_id = action["unique_id"];
         if(action_type == "pickup"){
@@ -141,13 +141,22 @@ void choose_actions(json mandatory_actions, map<string, Order> & orders, map<str
                         return restaurant.second.get_id() == order_restaurant;
                     })->second.get_location();
             double distance = MAXFLOAT;
+            double driver_distance;
             int assign_id = -1;
             for(auto & driver : drivers) {
-                pair<double, double> driver_location = driver.second.get_loacation();
-                double driver_distance = direct_distance(driver_location, restaurant_location);
-                /* if (order_capacity + driver.second.get_load() > driver.second.get_capacity()){
+                if(!driver_actions[to_string(driver.second.get_id())].empty()) {
+                    string id_of_last_action = driver_actions[to_string(driver.second.get_id())].back().substr(7); //schlampig!!!
+                    pair<double, double> drivers_last_location = orders[id_of_last_action].get_target_location();
+                    driver_distance = direct_distance(drivers_last_location, restaurant_location);
+                } else {
+                    pair<double, double> driver_location = driver.second.get_loacation();
+                    driver_distance = direct_distance(driver_location, restaurant_location);
+                }
+                /*
+                if (order_capacity + driver.second.get_load() > driver.second.get_capacity()){
                     continue;
-                } */
+                }
+                 */
                 if (driver_distance < distance) {
                     distance = driver_distance;
                     assign_id = driver.second.get_id();

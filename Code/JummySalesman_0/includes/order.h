@@ -20,6 +20,7 @@ public:
     std::string get_id() const;
     int get_restaurant() const;
     int get_capacity() const;
+    std::pair<double,double> get_target_location() const;
     bool is_assigned() const;
 
     void set_assigned(bool is_assigned);
