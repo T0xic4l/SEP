@@ -9,6 +9,7 @@
  */
 class Driver {
 private:
+    int idle_for{-1};
     int id{0};
     int capacity{0};
     int load{0};
@@ -26,6 +27,10 @@ public:
 
     void set_location(std::pair<double,double> new_location);
     void set_load(int new_load);
+    void increase_idle_duration();
+    void reset_idle_duration();
+
+    bool is_too_idle() const;
 };
 
 #endif

@@ -32,3 +32,15 @@ void Driver::set_location(std::pair<double, double> new_location) {
 void Driver::set_load(int new_load) {
     this->load = new_load;
 }
+
+void Driver::increase_idle_duration() {
+    this->idle_for += 1;
+}
+
+void Driver::reset_idle_duration() {
+    this->idle_for = 0;
+}
+
+bool Driver::is_too_idle() const{
+    return this->idle_for > 5;
+}

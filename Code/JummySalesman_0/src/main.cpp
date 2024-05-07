@@ -75,7 +75,7 @@ void run_simulation(json & first_response, const string & host, map<string, Driv
         json parsed_response = json::parse(response.text);
 
         handle_event(orders, drivers, driver_actions, parsed_response["event"]);
-        update_drivers(drivers, parsed_response["drivers"]);
+        update_drivers(drivers, parsed_response["drivers"], driver_actions);
         choose_actions(parsed_response["mandatory_actions"], orders, drivers, restaurants, driver_actions);
         cout << actions_to_send.dump() << endl;
 
@@ -111,14 +111,19 @@ void handle_event(map<string, Order> & orders, map<string, Driver> & drivers, ma
         if(event["event_type"] == "dropoff"){
         }
     } else {
-        cout << event.dump() << endl;
     }
 }
 
-void update_drivers(map<string, Driver> & drivers, json updated_drivers){
+void update_drivers(map<string, Driver> & drivers, json updated_drivers, map<string, vector<string>> & driver_actions){
     for(auto & updated_driver : updated_drivers){
         string update_id = updated_driver["id"].dump();
         drivers[update_id].set_location(updated_driver["location"]);
+
+        if(list_is_empty(update_id, driver_actions)) {
+            drivers[update_id].increase_idle_duration();
+        } else {
+            drivers[update_id].reset_idle_duration();
+        }
     }
 }
 
@@ -157,11 +162,11 @@ void choose_actions(json mandatory_actions, map<string, Order> & orders, map<str
                     assign_id = driver.second.get_id();
                 }
             }
-            if(!orders[order_id].is_assigned() && assign_id != -1){
+            if(!orders[order_id].is_assigned() && assign_id != -1) {
                 driver_actions[to_string(assign_id)].push_back(unique_id);
                 orders[order_id].set_assigned(true);
             }
-        }else if(action_type == "dropoff"){
+        } else if(action_type == "dropoff") {
             string driver_id = action["data"]["driver"].dump();
 
             bool already_assigned = any_of(

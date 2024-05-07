@@ -62,7 +62,7 @@ void handle_event(
  * @param drivers Liste der fahrer die aktuallisert werden soll
  * @param updated_drivers JSON mit den aktuallisierten Fahrern, die übernommen werden soll.
 */
-void update_drivers(std::map<std::string, Driver> & drivers, json updated_drivers);
+void update_drivers(std::map<std::string, Driver> & drivers, json updated_drivers, std::map<std::string, std::vector<std::string>> & driver_actions);
 /**
  * @brief stellt die driver_actions zusammen die an den server weitergegeben werden.
  * @param mandatory_actions
