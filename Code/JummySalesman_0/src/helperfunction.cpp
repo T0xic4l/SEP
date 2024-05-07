@@ -5,3 +5,7 @@ double direct_distance(std::pair<double, double> &cord1,std::pair<double, double
     double y = cord1.second - cord2.second;
     return std::sqrt(x*x+y*y);
 }
+
+bool list_is_empty(std::string id, std::map<std::string, std::vector<std::string>> & driver_actions) {
+    return driver_actions[id].empty();
+}

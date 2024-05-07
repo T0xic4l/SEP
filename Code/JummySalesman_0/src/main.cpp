@@ -108,10 +108,7 @@ void handle_event(map<string, Order> & orders, map<string, Driver> & drivers, ma
         if(result != driver_actions[to_string(driver_id)].end())
             driver_actions[to_string(driver_id)].erase(result);
 
-        if(event["event_type"] == "dropoff"){ //falls das event ein dropoff ist verringere den load des drivers
-            //int current_load = drivers[to_string(driver_id)].get_load();
-            //int order_cap = orders[order_id].get_capacity();
-            //drivers[to_string(driver_id)].set_load(current_load - order_cap);
+        if(event["event_type"] == "dropoff"){
         }
     } else {
         cout << event.dump() << endl;
@@ -130,7 +127,6 @@ void choose_actions(json mandatory_actions, map<string, Order> & orders, map<str
         string action_type = action["action_type"];
         string order_id = action["data"]["order_id"];
         int order_restaurant = orders[order_id].get_restaurant();
-        //int order_capacity = orders[order_id].get_capacity();
 
         string unique_id = action["unique_id"];
         if(action_type == "pickup"){
@@ -140,31 +136,29 @@ void choose_actions(json mandatory_actions, map<string, Order> & orders, map<str
                     [order_restaurant](const auto & restaurant){
                         return restaurant.second.get_id() == order_restaurant;
                     })->second.get_location();
-            double distance = MAXFLOAT;
+            double time = MAXFLOAT;
+            double estimated_time;
             double driver_distance;
             int assign_id = -1;
             for(auto & driver : drivers) {
-                if(!driver_actions[to_string(driver.second.get_id())].empty()) {
+                if(!list_is_empty(to_string(driver.second.get_id()), driver_actions)) {
                     string id_of_last_action = driver_actions[to_string(driver.second.get_id())].back().substr(7); //schlampig!!!
                     pair<double, double> drivers_last_location = orders[id_of_last_action].get_target_location();
                     driver_distance = direct_distance(drivers_last_location, restaurant_location);
+                    estimated_time = driver_distance / driver.second.get_speed();
                 } else {
                     pair<double, double> driver_location = driver.second.get_loacation();
                     driver_distance = direct_distance(driver_location, restaurant_location);
+                    estimated_time = driver_distance / driver.second.get_speed();
                 }
-                /*
-                if (order_capacity + driver.second.get_load() > driver.second.get_capacity()){
-                    continue;
-                }
-                 */
-                if (driver_distance < distance) {
-                    distance = driver_distance;
+
+                if (estimated_time < time) {
+                    time = estimated_time;
                     assign_id = driver.second.get_id();
                 }
             }
             if(!orders[order_id].is_assigned() && assign_id != -1){
                 driver_actions[to_string(assign_id)].push_back(unique_id);
-                //drivers[to_string(assign_id)].set_load(drivers[to_string(assign_id)].get_load() + order_capacity);
                 orders[order_id].set_assigned(true);
             }
         }else if(action_type == "dropoff"){
